@@ -60,9 +60,7 @@ class SinglyLinkedList:
             print("La lista está vacía.")
             return
         if posicion == 0:
-            temp = self.head
             self.head = self.head.next
-            del temp
             return
         actual = self.head
         contador = 0
@@ -72,23 +70,17 @@ class SinglyLinkedList:
         if actual.next is None:
             print("Posición fuera de rango.")
             return
-        temp = actual.next
-        actual.next = temp.next
-        del temp
+        actual.next = actual.next.next
 
     # Eliminar el primer nodo
     def eliminarInicio(self):
-        # Verificar si la lista está vacía
         if self.head is None:
             print("La lista está vacía.")
             return
-        temp = self.head
         self.head = self.head.next
-        del temp
 
-
-    def queHace (self):
-
+    def queHace(self):
+        # Esta función elimina el último nodo de la lista (eliminar al final)
         if self.head is None:
             print("La lista está vacía.")
             return
@@ -104,38 +96,92 @@ class SinglyLinkedList:
 
         actual.next = None
 
+    # Determinar si la lista está vacía
+    def esVacia(self):
+        return self.head is None
+
+    # Buscar un elemento dentro de la lista
+    def buscar(self, valor):
+        actual = self.head
+        posicion = 0
+        while actual:
+            if actual.data == valor:
+                return posicion
+            actual = actual.next
+            posicion += 1
+        return -1
 
 
-# ---------- PRUEBAS ----------
-lista1 = SinglyLinkedList()
+import os
 
-lista1.insert(10)
-lista1.insert(20)
-lista1.insert(30)
-lista1.insert(40)
-lista1.insert(50)
-lista1.insert(60)
+def limpiar_pantalla():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
-print("Lista original:")
-lista1.display()
 
-lista1.insert_at_beginning(1)
-print("\nDespués de insertar 1 al inicio:")
-lista1.display()
+def menu():
+    lista1 = SinglyLinkedList()
 
-lista1.insert_at_middle(99)
-print("\nDespués de insertar 99 en la mitad:")
-lista1.display()
+    while True:
+        limpiar_pantalla()
+        print("\n--- MENÚ LISTA ENLAZADA ---")
+        print("1. Insertar al inicio")
+        print("2. Insertar al final")
+        print("3. Insertar en el medio")
+        print("4. Eliminar al inicio")
+        print("5. Eliminar en una posición")
+        print("6. Eliminar al final")
+        print("7. Verificar si la lista está vacía")
+        print("8. Buscar un elemento")
+        print("9. Mostrar lista")
+        print("0. Salir")
 
-# ------ PRUEBAS DE ELIMINACIÓN ------
-lista1.eliminarEnPosicion(2)
-print("\nDespués de eliminar el nodo en la posición 2:")
-lista1.display()
+        opcion = input("Elige una opción: ")
 
-lista1.eliminarInicio()
-print("\nDespués de eliminar el nodo del inicio:")
-lista1.display()
+        match opcion:
+            case "1":
+                valor = int(input("Valor a insertar al inicio: "))
+                lista1.insert_at_beginning(valor)
 
-lista1.queHace()
-print("\n Ver lo que hace:")
-lista1.display()    
+            case "2":
+                valor = int(input("Valor a insertar al final: "))
+                lista1.insert(valor)
+
+            case "3":
+                valor = int(input("Valor a insertar en el medio: "))
+                lista1.insert_at_middle(valor)
+
+            case "4":
+                lista1.eliminarInicio()
+
+            case "5":
+                pos = int(input("Posición a eliminar: "))
+                lista1.eliminarEnPosicion(pos)
+
+            case "6":
+                lista1.queHace()
+
+            case "7":
+                print("¿Está vacía?:", lista1.esVacia())
+
+            case "8":
+                valor = int(input("Valor a buscar: "))
+                resultado = lista1.buscar(valor)
+                if resultado == -1:
+                    print("Elemento no encontrado.")
+                else:
+                    print(f"Elemento encontrado en la posición {resultado}")
+
+            case "9":
+                lista1.display()
+
+            case "0":
+                print("Saliendo...")
+                break
+
+            case _:
+                print("Opción no válida.")
+
+        input("\nPresiona ENTER para continuar...")
+
+
+menu()
