@@ -120,6 +120,8 @@ def limpiar_pantalla():
 
 def menu():
     lista1 = SinglyLinkedList()
+    for valor in [10, 20, 30, 40, 50]:
+        lista1.insert(valor)
 
     while True:
         limpiar_pantalla()
