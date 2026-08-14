@@ -1,10 +1,10 @@
-Reporte de Clima - Costa Rica
-Laboratorio #2 - Estructura de Datos
-Integrantes:
-- Jonathan Josué Rojas Estrada
-- Danny Isaac Pérez Zamora
+====================================
+ REPORTE DE TEMPERATURAS
+====================================
 
-Cantidad de datos analizados: 99
-Temperatura promedio: 26.16
+Cantidad de temperaturas: 99
+Nombre: Jonathan Josué Rojas Estrada
+Nombre: Danny Isaac Pérez Zamora
+Temperatura promedio: 26.161616161616163
 Temperatura mayor: 34
 Temperatura menor: 18
