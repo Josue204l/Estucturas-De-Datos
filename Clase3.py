@@ -1,246 +1,241 @@
+# Clase Nodo
+# Cada nodo guarda un dato y dos referencias:
+# anterior -> apunta al nodo anterior
+# siguiente -> apunta al nodo siguiente
+
 class Nodo:
-    def __init__(self, valor):
-        self.valor = valor
-        self.siguiente = None
+    def __init__(self, dato):
+        self.dato = dato
         self.anterior = None
- 
- 
-class ListaDobleEnlazada:
+        self.siguiente = None
+
+
+# Clase ListaDoblementeEnlazada
+# Se encarga de manejar todos los nodos de la lista
+
+class ListaDoblementeEnlazada:
     def __init__(self):
-        self.cabeza = None
-        self.cola = None
-        self.tamaño = 0
- 
-    # ---------- #1 -----------
- 
-    def esta_vacia(self):
-        return self.cabeza is None
- 
-    def cantidadDeelementos(self):
-        return self.tamaño
- 
-    # ---------- inserciones ----------
- 
-    def agregara_al_inicio(self, valor):
-        nuevo_nodo = Nodo(valor)
-        if self.esta_vacia():
-            self.cabeza = nuevo_nodo
-            self.cola = nuevo_nodo
+        self.inicio = None
+        self.final = None
+
+    # Verifica si la lista esta vacia
+    def estaVacia(self):
+        return self.inicio is None
+
+    # Insertar un nodo al inicio
+    def insertarInicio(self, dato):
+        nuevo = Nodo(dato)
+
+        # Si la lista esta vacia, el nuevo nodo
+        # sera tanto el inicio como el final
+        if self.estaVacia():
+            self.inicio = nuevo
+            self.final = nuevo
         else:
-            nuevo_nodo.siguiente = self.cabeza
-            self.cabeza.anterior = nuevo_nodo
-            self.cabeza = nuevo_nodo
-        self.tamaño += 1
- 
-    def insertard_final(self, valor):
-        nuevo_nodo = Nodo(valor)
-        if self.esta_vacia():
-            self.cabeza = nuevo_nodo
-            self.cola = nuevo_nodo
+            # El nuevo nodo apunta al inicio actual
+            nuevo.siguiente = self.inicio
+
+            # El inicio actual apunta hacia atras
+            # al nuevo nodo
+            self.inicio.anterior = nuevo
+
+            # Ahora el nuevo nodo es el inicio
+            self.inicio = nuevo
+
+    # Insertar un nodo al final
+    def insertarFinal(self, dato):
+        nuevo = Nodo(dato)
+
+        # Si la lista esta vacia
+        if self.estaVacia():
+            self.inicio = nuevo
+            self.final = nuevo
         else:
-            self.cola.siguiente = nuevo_nodo
-            nuevo_nodo.anterior = self.cola
-            self.cola = nuevo_nodo
-        self.tamaño += 1
- 
-    def insertar_medio(self, valor, posicion):
-        if posicion < 0 or posicion > self.tamaño:
-            print("Posición inválida.")
-            return
+            # El nuevo nodo apunta hacia atras
+            # al nodo que actualmente es el final
+            nuevo.anterior = self.final
+
+            # El nodo final apunta hacia adelante
+            # al nuevo nodo
+            self.final.siguiente = nuevo
+
+            # Ahora el nuevo nodo es el final
+            self.final = nuevo
+
+    # Insertar un nodo en una posicion determinada
+    def insertarMedio(self, dato, posicion):
+        # Si la posicion es 0, insertamos al inicio
         if posicion == 0:
-            self.agregara_al_inicio(valor)
+            self.insertarInicio(dato)
             return
-        if posicion == self.tamaño:
-            self.insertard_final(valor)
+
+        nuevo = Nodo(dato)
+        actual = self.inicio
+        contador = 0
+
+        # Avanzamos hasta llegar a la posicion
+        # donde queremos insertar
+        while actual is not None and contador < posicion:
+            actual = actual.siguiente
+            contador += 1
+
+        # Si llegamos al final, insertamos al final
+        if actual is None:
+            self.insertarFinal(dato)
             return
- 
-        nuevo_nodo = Nodo(valor)
-        actual = self.cabeza
-        for _ in range(posicion - 1):
-            actual = actual.siguiente
-        nuevo_nodo.siguiente = actual.siguiente
-        nuevo_nodo.anterior = actual
-        actual.siguiente.anterior = nuevo_nodo
-        actual.siguiente = nuevo_nodo
-        self.tamaño += 1
- 
-    # ---------- eliminaciones ----------
- 
-    def eliminar_inicio(self):
-        if self.esta_vacia():
-            print("No se puede eliminar, la lista está vacía.")
-            return None
- 
-        valor_eliminado = self.cabeza.valor
-        if self.cabeza == self.cola:
-            self.cabeza = None
-            self.cola = None
-        else:
-            self.cabeza = self.cabeza.siguiente
-            self.cabeza.anterior = None
-        self.tamaño -= 1
-        return valor_eliminado
- 
-    def EliminmarFinal(self):
-        if self.esta_vacia():
-            print("La lista está vacía.")
-            return None
- 
-        valor_eliminado = self.cola.valor
-        if self.cabeza != self.cola:
-            self.cola = self.cola.anterior
-            self.cola.siguiente = None
-        else:
-            self.cabeza = None
-            self.cola = None
-        self.tamaño -= 1
-        return valor_eliminado
- 
-    def eliminar_medio(self, posicion):
-        if self.esta_vacia():
-            print("No se puede eliminar, la lista está vacía.")
-            return None
-        if posicion < 0 or posicion >= self.tamaño:
-            print("Posición inválida.")
-            return None
-        if posicion == 0:
-            return self.eliminar_inicio()
-        if posicion == self.tamaño - 1:
-            return self.EliminmarFinal()
- 
-        actual = self.cabeza
-        for _ in range(posicion):
-            actual = actual.siguiente
- 
-        valor_eliminado = actual.valor
+
+        # Guardamos el nodo anterior al actual
         anterior = actual.anterior
-        siguiente = actual.siguiente
- 
-        anterior.siguiente = siguiente
-        siguiente.anterior = anterior  
- 
-        self.tamaño -= 1
-        return valor_eliminado
- 
-    def vaciar(self):
-        self.cabeza = None
-        self.cola = None
-        self.tamaño = 0
- 
-    # ---------- consultas ----------
- 
-    def buscarElemento(self, valor):
-        if self.esta_vacia():
-            print("La lista está vacía.")
-            return None
-        actual = self.cabeza
-        posicion = 0
-        while actual:
-            if actual.valor == valor:
-                return posicion
-            actual = actual.siguiente
-            posicion += 1
-        return -1
- 
-    def obtener(self, posicion):
-        if posicion < 0 or posicion >= self.tamaño:
-            print("Posición inválida.")
-            return None
-        actual = self.cabeza
-        for _ in range(posicion):
-            actual = actual.siguiente
-        return actual.valor
- 
-    def actualizar(self, posicion, valor):
-        if posicion < 0 or posicion >= self.tamaño:
-            print("Posición inválida.")
-            return False
-        actual = self.cabeza
-        for _ in range(posicion):
-            actual = actual.siguiente
-        actual.valor = valor
-        return True
- 
-    def invertir(self):
-        actual = self.cabeza
-        self.cabeza, self.cola = self.cola, self.cabeza
-        while actual:
-            actual.anterior, actual.siguiente = actual.siguiente, actual.anterior
-            actual = actual.anterior  
- 
-    # ---------- recorridos / impresión ----------
- 
-    def recorrer_adelante(self):
-        if self.esta_vacia():
-            print("La lista está vacía.")
+
+        # Conectamos el nuevo nodo con los nodos vecinos
+        nuevo.anterior = anterior
+        nuevo.siguiente = actual
+
+        # Actualizamos las conexiones de los nodos vecinos
+        anterior.siguiente = nuevo
+        actual.anterior = nuevo
+
+    # Eliminar el nodo del inicio
+    def eliminarInicio(self):
+        if self.estaVacia():
+            print("La lista esta vacia")
             return
-        actual = self.cabeza
-        while actual:
-            print(actual.valor, end=" ")
-            actual = actual.siguiente
-        print()
- 
-    def imprimirAtras(self):
-        if self.esta_vacia():
-            print("La lista está vacía.")
+
+        # Guardamos temporalmente el nodo que vamos a eliminar
+        eliminado = self.inicio
+
+        # Si solo existe un nodo
+        if self.inicio == self.final:
+            self.inicio = None
+            self.final = None
+        else:
+            # El segundo nodo pasa a ser el inicio
+            self.inicio = self.inicio.siguiente
+
+            # El nuevo inicio ya no tiene nodo anterior
+            self.inicio.anterior = None
+
+        print("Elemento eliminado:", eliminado.dato)
+
+    # Eliminar un nodo de una posicion determinada
+    def eliminarMedio(self, posicion):
+        if self.estaVacia():
+            print("La lista esta vacia")
             return
-        actual = self.cola
-        while actual:
-            print(actual.valor, end=" ")
-            actual = actual.anterior
+
+        # Si queremos eliminar el primero
+        if posicion == 0:
+            self.eliminarInicio()
+            return
+
+        actual = self.inicio
+        contador = 0
+
+        # Buscamos el nodo de la posicion indicada
+        while actual is not None and contador < posicion:
+            actual = actual.siguiente
+            contador += 1
+
+        # Si no encontramos el nodo
+        if actual is None:
+            print("Posicion no valida")
+            return
+
+        # Si el nodo es el final
+        if actual == self.final:
+            self.final = actual.anterior
+            self.final.siguiente = None
+        else:
+            # Guardamos los nodos vecinos
+            anterior = actual.anterior
+            siguiente = actual.siguiente
+
+            # Saltamos el nodo que queremos eliminar
+            anterior.siguiente = siguiente
+            siguiente.anterior = anterior
+
+        print("Elemento eliminado:", actual.dato)
+
+    # Mostrar la lista desde el inicio hasta el final
+    def mostrarAdelante(self):
+        actual = self.inicio
+
+        print("Lista hacia adelante:")
+
+        while actual is not None:
+            print(actual.dato, end=" <-> ")
+            actual = actual.siguiente
+
         print("None")
- 
- 
-if __name__ == "__main__":
-    lista = ListaDobleEnlazada()
- 
-    print("¿Vacía?", lista.esta_vacia())
-    lista.agregara_al_inicio(5)
-    lista.agregara_al_inicio(10)
-    lista.agregara_al_inicio(15)
-    print()
-    print("Adelante: ", end="")
-    print()
-    lista.recorrer_adelante()
-    print()
-    print("Atrás: ", end="")
-    print()
-    lista.imprimirAtras()
-    print(f"La lista tiene {lista.cantidadDeelementos()} elementos.")
-    print()
-    lista.EliminmarFinal()
-    print("Tras eliminar final: ", end="")
-    print()
-    lista.recorrer_adelante()
-    print()
-    print("Posición de 10:", lista.buscarElemento(10))
-    print()
-    lista.insertard_final(100)
-    print()
-    lista.insertar_medio(99, 1)
-    print()
-    print("Tras insertar_medio y insertard_final: ", end="")
-    print()
-    lista.recorrer_adelante()
-    print()
- 
-    print("obtener(1):", lista.obtener(1))
-    lista.actualizar(1, 999)
-    print()
-    print("Tras actualizar(1, 999): ", end="")
-    lista.recorrer_adelante()
-    print()
-    print("eliminar_medio(1):", lista.eliminar_medio(1))
-    print("Tras eliminar_medio(1): ", end="")
-    print()
-    lista.recorrer_adelante()
-    print()
-    lista.invertir()
-    print("Tras invertir: ", end="")
-    lista.recorrer_adelante()
-    print()
- 
-    lista.vaciar()
-    print("¿Vacía tras vaciar()?", lista.esta_vacia())
-    print()
- 
+
+    # Mostrar la lista desde el final hasta el inicio
+    def mostrarAtras(self):
+        actual = self.final
+
+        print("Lista hacia atras:")
+
+        while actual is not None:
+            print(actual.dato, end=" <-> ")
+            actual = actual.anterior
+
+        print("None")
+    # Contar el número de elementos en la lista
+    def contarElementos(self):
+        actual = self.inicio
+        contador = 0
+
+        while actual is not None:
+            contador += 1
+            actual = actual.siguiente
+
+        return contador
+
+# --------------------------------------------------
+# PROGRAMA PRINCIPAL
+# --------------------------------------------------
+
+lista = ListaDoblementeEnlazada()
+
+# Insertamos algunos elementos
+lista.insertarFinal(10)
+lista.insertarFinal(20)
+lista.insertarFinal(30)
+
+print("Lista inicial:")
+lista.mostrarAdelante()
+
+# Insertar al inicio
+print("\nInsertar al inicio:")
+lista.insertarInicio(5)
+lista.mostrarAdelante()
+
+# Insertar al final
+print("\nInsertar al final:")
+lista.insertarFinal(40)
+lista.mostrarAdelante()
+
+# Insertar al medio
+print("\nInsertar 15 en la posicion 2:")
+lista.insertarMedio(15, 2)
+lista.mostrarAdelante()
+
+# Mostrar hacia atras
+print("\nRecorrer la lista hacia atras:")
+lista.mostrarAtras()
+
+# Eliminar al inicio
+print("\nEliminar al inicio:")
+lista.eliminarInicio()
+lista.mostrarAdelante()
+
+# Eliminar al medio
+print("\nEliminar el elemento de la posicion 2:")
+lista.eliminarMedio(2)
+lista.mostrarAdelante()
+
+# Mostrar nuevamente hacia atras
+print("\nLista final hacia atras:")
+lista.mostrarAtras()
+
+# Contar elementos
+print("\nNúmero de elementos en la lista:", lista.contarElementos())
