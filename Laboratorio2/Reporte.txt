@@ -1,0 +1,10 @@
+Reporte de Clima - Costa Rica
+Laboratorio #2 - Estructura de Datos
+Integrantes:
+- Jonathan Josué Rojas Estrada
+- Danny Isaac Pérez Zamora
+
+Cantidad de datos analizados: 99
+Temperatura promedio: 26.16
+Temperatura mayor: 34
+Temperatura menor: 18
